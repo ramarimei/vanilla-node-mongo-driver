@@ -1,0 +1,3 @@
+- ensure mongodb running
+- npm start
+- get and post to localhost:3000/tools
