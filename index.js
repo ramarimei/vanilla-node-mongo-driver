@@ -1,31 +1,38 @@
 const express = require('express');
-const { MongoClient } = require("mongodb");
+const Tool = require('./data-access/models/tool');
+var mongoose = require('mongoose');
 const app = express();
 const port = 3000;
 
 const uri = 'mongodb://localhost:27017';
 
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+//Import the mongoose module
+
+//Set up default mongoose connection
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+//Get the default connection
+var db = mongoose.connection;
+
+//Bind connection to error event (to get notification of connection errors)
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
 app.use(express.json())
 
 app.get('/tools', async (req, res) => {
-    await client.connect();
-    // get the tools db
-    const db = await client.db('tools');
-
-    // get the tools collection and find everything in it
-    const tools = await db.collection('tools').find({}).toArray();
+    const tools = await Tool.find()
     res.json(tools);
 })
 
 
 app.post('/tools', async (req, res) => {
     const theBody = req.body;
-    await client.connect();
-    const db = await client.db('tools');
+
+    const newTool = new Tool({ ...theBody })
+
     try {
         // insert body object to the tools collection (will be created if not exists)
-        const newTool = await db.collection('tools').insertOne(theBody)
+        await newTool.save();
 
         // send the db generated id back to the client in case they want it
         res.status(201).json(newTool.insertedId)
