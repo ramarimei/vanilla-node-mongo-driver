@@ -10,14 +10,10 @@ const uri = 'mongodb://localhost:27017';
 // //Set up default mongoose connection
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-//Get the default connection
-
-//Bind connection to error event (to get notification of connection errors)
-
 app.use(express.json())
 
 app.get('/tools', async (req, res) => {
-    console.log('adsf');
+    // can't get much more succinct than this!
     const tools = await Tool.find()
     res.json(tools);
 })
@@ -29,6 +25,7 @@ app.post('/tools', async (req, res) => {
 
     try {
         // insert body object to the tools collection (will be created if not exists)
+        // mongoose will automatically validate against the schema
         await newTool.save();
 
         // send the db generated id back to the client in case they want it

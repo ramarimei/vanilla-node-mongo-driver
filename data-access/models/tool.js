@@ -11,7 +11,7 @@ const ToolModelSchema = new Schema({
   weightKg: Number
 });
 
-// Compile model from schema
+// Compile model from schema.  
 const Tool = mongoose.model('mitre10_tools', ToolModelSchema);
 
 module.exports = Tool
