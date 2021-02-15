@@ -7,14 +7,11 @@ const Schema = mongoose.Schema;
 
 const ToolModelSchema = new Schema({
   name: String,
-  price: Number,
-  weightKg: Number,
-  lengthCm: Number,
-  bob: { type: Number, required: true },
-  fish: [{ name: String, species: String }]
+  price: { type : Number, required : true },
+  weightKg: Number
 });
 
 // Compile model from schema
-const Tool = mongoose.model('tools', ToolModelSchema);
+const Tool = mongoose.model('mitre10_tools', ToolModelSchema);
 
 module.exports = Tool

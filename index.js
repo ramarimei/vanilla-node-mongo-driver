@@ -7,23 +7,20 @@ const port = 3000;
 const uri = 'mongodb://localhost:27017';
 
 //Import the mongoose module
-
-//Set up default mongoose connection
+// //Set up default mongoose connection
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 //Get the default connection
-var db = mongoose.connection;
 
 //Bind connection to error event (to get notification of connection errors)
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 app.use(express.json())
 
 app.get('/tools', async (req, res) => {
+    console.log('adsf');
     const tools = await Tool.find()
     res.json(tools);
 })
-
 
 app.post('/tools', async (req, res) => {
     const theBody = req.body;
@@ -35,10 +32,10 @@ app.post('/tools', async (req, res) => {
         await newTool.save();
 
         // send the db generated id back to the client in case they want it
-        res.status(201).json(newTool.insertedId)
+        res.status(201).json()
     } catch (err) {
         console.log(err)
-        res.sendStatus(500)
+        res.status(500).send(err.message)
     }
 })
 
